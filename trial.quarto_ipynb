@@ -1,0 +1,122 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Visualization (Exploring variation)\"\n",
+        "author: \"Peter Ganong and Maggie Shi\"\n",
+        "date: today\n",
+        "date-format: long\n",
+        "format: \n",
+        "    html:\n",
+        "        echo: true\n",
+        "        code: true\n",
+        "        toc: true\n",
+        "        output: true\n",
+        "engine: jupyter\n",
+        "---"
+      ],
+      "id": "88a339e3"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "message": false
+      },
+      "source": [
+        "#| echo: false\n",
+        "import altair as alt\n",
+        "from vega_datasets import data\n",
+        "from palmerpenguins import load_penguins\n",
+        "from plotnine import *\n",
+        "from plotnine.data import diamonds, mpg\n",
+        "import pandas as pd\n",
+        "import numpy as np\n",
+        "import matplotlib.pyplot as plt\n",
+        "import matplotlib.image as mpimg"
+      ],
+      "id": "aec69a81",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Motivation\n",
+        "\n",
+        "## Introduction to the next two lectures\n",
+        "\n",
+        "Most of our visualization lectures are based on the University of Washington textbook, but the textbook doesn't have enough material on exploratory data analysis. We therefore are supplementing with the [Data Visualization](https://r4ds.hadley.nz/data-visualize) and [Exploratory Data Analysis](https://r4ds.hadley.nz/eda) material in the R for Data Science textbook (with the code translated to Altair).\n",
+        "\n",
+        "* `diamonds` is from \"Exploratory Data Analysis\"\n",
+        "* `movies` is from the UW textbook \n",
+        "* `penguins` is from \"Data Visualization\" \n"
+      ],
+      "id": "88f9c2b8"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "a = 54\n",
+        "print(a*5)"
+      ],
+      "id": "ff313162",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Question three Part 2\n"
+      ],
+      "id": "190bbdad"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "directory_2 = \"parking_tickets_one_percent.csv\"\n",
+        "df_2 = pd.read_csv(directory_2)\n",
+        "\n",
+        "\n",
+        "df_2.columns = df_2.columns.str.strip().str.lower().str.replace(' ', '_')\n",
+        "\n",
+        "cleaning = df_2.dropna(subset=['vehicle_make', 'ticket_queue'])\n",
+        "\n",
+        "time_paid = cleaning.groupby('vehicle_make').apply(\n",
+        "    lambda x: (x['ticket_queue'] == 'Paid').mean()\n",
+        ").reset_index(name='time_paid')\n",
+        "\n",
+        "alt.Chart(time_paid).mark_bar().encode(\n",
+        "    x='vehicle_make:N',\n",
+        "    y='time_paid:Q',\n",
+        "    color='vehicle_make:N'\n",
+        ").properties(\n",
+        "    width=900,\n",
+        "    height=500,\n",
+        "    title=\"Vehicle Type and no of times they are paid\"\n",
+        ")\n",
+        "\n",
+        "#save(chart, 'figures\\chart_q3p2.png')"
+      ],
+      "id": "6f18fe8d",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\mmmoh\\AppData\\Local\\Programs\\Python\\Python312\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

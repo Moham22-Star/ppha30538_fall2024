@@ -1,0 +1,73 @@
+---
+title: "Visualization (Exploring variation)"
+author: "Peter Ganong and Maggie Shi"
+date: today
+date-format: long
+format: 
+    html:
+        echo: true
+        code: true
+        toc: true
+        output: true
+engine: jupyter
+---
+
+
+```{python}
+#| echo: false
+#| message: false
+import altair as alt
+from vega_datasets import data
+from palmerpenguins import load_penguins
+from plotnine import *
+from plotnine.data import diamonds, mpg
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+```
+
+
+# Motivation
+
+## Introduction to the next two lectures
+
+Most of our visualization lectures are based on the University of Washington textbook, but the textbook doesn't have enough material on exploratory data analysis. We therefore are supplementing with the [Data Visualization](https://r4ds.hadley.nz/data-visualize) and [Exploratory Data Analysis](https://r4ds.hadley.nz/eda) material in the R for Data Science textbook (with the code translated to Altair).
+
+* `diamonds` is from "Exploratory Data Analysis"
+* `movies` is from the UW textbook 
+* `penguins` is from "Data Visualization" 
+
+
+```{python}
+a = 54
+print(a*5)
+```
+
+## Question three Part 2
+
+```{python}
+directory_2 = "parking_tickets_one_percent.csv"
+df_2 = pd.read_csv(directory_2)
+
+
+df_2.columns = df_2.columns.str.strip().str.lower().str.replace(' ', '_')
+
+cleaning = df_2.dropna(subset=['vehicle_make', 'ticket_queue'])
+
+time_paid = cleaning.groupby('vehicle_make').apply(
+    lambda x: (x['ticket_queue'] == 'Paid').mean()
+).reset_index(name='time_paid')
+
+alt.Chart(time_paid).mark_bar().encode(
+    x='vehicle_make:N',
+    y='time_paid:Q',
+    color='vehicle_make:N'
+).properties(
+    width=900,
+    height=500,
+    title="Vehicle Type and no of times they are paid"
+)
+
+#save(chart, 'figures\chart_q3p2.png')
+```
